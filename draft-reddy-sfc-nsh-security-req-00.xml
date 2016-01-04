@@ -158,7 +158,7 @@
     <section anchor="sec-intro" title="Introduction">
       <t>Service function chaining (SFC) <xref target="RFC7665"></xref>
       involves steering traffic flows through a set of service functions in a
-      specific order, such an ordered list of service functions is called a
+      specific order. Such an ordered list of service functions is called a
       Service Function Chain (SFC). The actual forwarding path used to realize
       an SFC is called the Service Function Path (SFP). Network Service
       Headers (NSH) <xref target="I-D.ietf-sfc-nsh"></xref> provides a
@@ -173,6 +173,8 @@
           <t>Metadata carrying the information about the packets being
           chained.</t>
         </list></t>
+        
+     <t>Note that the payload encapsulated by NSH is not part of the NSH data.</t>
 
       <t>This document defines security requirments for NSH data and privacy
       requirements for NSH metadata.</t>
@@ -193,7 +195,8 @@
           protected.</t>
 
           <t>In a SFC domain where attackers can capture and replay NSH data,
-          NSH data MUST provide a mechanism for replay detection.</t>
+          NSH data MUST provide a mechanism for replay detection and 
+          anti-replay mitigation.</t>
 
           <t>In a SFC domain where attackers can modify the NSH encapsulated
           packet, NSH encapsulated packet MUST be authenticated and integrity
@@ -205,22 +208,27 @@
           specific threats are discussed in Section 5.2 of <xref
           target="RFC6973"></xref>.</t>
 
-          <t>TBD: To avoid fragmentation and amplification attacks, NSH data
+          <t>TBD: To avoid fragmentation, NSH data
           MUST be kept under Maximum Transmission Unit (MTU) including the
           byte overhead of the encapsulated packet.</t>
-
+          
+          <t>TBD: To avoid amplification attacks, NSH data
+          MUST be kept under an acceptable level. This level is controlled 
+          and fixed by the network administrator.</t>
+          
           <t>Negotiation of authentication, message integrity protection and
           encryption algorithms between SF components MUST be capable of
           detecting downgrade attacks.</t>
 
-          <t>Only the SF components in the SFP SHOULD be able to update the
-          integrity protected NSH data. SF components not in the SFP SHOULD
-          NOT hold the keying material to act on the NSH data.</t>
-
-          <t>Only the SF components in the SFP SHOULD be able to decrypt and
-          update the NSH metadata. SF components not in the SFP SHOULD NOT
-          hold the keying material to decrypt the NSH metadata.</t>
-        </list></t>
+          <t>Authenticated protected NSH data MUST only be updated by authorized
+          SF components. Authorized SF are determined by the administrator of 
+          the SFC domain</t>
+          
+          <t>Encrypted NSH data MUST only be decrypted by authorized
+          SF components. Authorized SF are determined by the administrator of 
+          the SFC domain</t>
+          
+          </list></t>
     </section>
 
     <section title="IANA Considerations">
